@@ -46,7 +46,7 @@ def ai_function(prompt):
         result[tag] = max([round(float(similarity),2) for _, similarity in tag_similarities])
 
 
-    print("Similarity Results:", result)  # Debug: Log the results
+    # print("Similarity Results:", result)  # Debug: Log the results
 
-    # print(data_manipulation.rank_songs(result))
+    print(data_manipulation.rank_songs(result))
     return result
