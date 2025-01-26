@@ -25,6 +25,8 @@
         
         
         <ul class="ul" id="song-list"></ul>
+
+    
     </div>  
     
 
@@ -60,11 +62,16 @@
                 // Populate the song list
                 if (Array.isArray(data)) {
                     data.forEach((song, index) => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${index + 1}: ${song['Artist Name(s)']} - ${song['Track Name']}`;
-                listItem.classList.add('li');
-                songList.appendChild(listItem);
-            });
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${index + 1}: ${song['Artist Name(s)']} - ${song['Track Name']}`;
+                        listItem.classList.add('li');
+                        songList.appendChild(listItem);
+                    })
+                    const button = document.createElement('button');
+                    button.classList.add('spotify-button');
+                    button.textContent = 'Make it a Spotify playlist!'
+                    songList.append(button);
+
             } else {
             console.error('Invalid songs data format:', songs);
         }

@@ -155,11 +155,35 @@
     border-style: solid;
     border-color: #8338ec;
     border-width: 2px;
-    margin-right: 30px;
+    margin-right: 60px;
     margin-left: 30px;
     margin-bottom: 10px;
     list-style-type: none;
     font-family: futura, Helvetica;
+}
+
+
+
+.spotify-button{
+    margin: 30px;
+    font-weight: 500;
+    border-radius: 20px;
+    font-size: 14px;
+    font-family: futura, Helvetica;
+    border-width: 2px;
+    height:50px;
+    width:220px;
+    border-style: solid;
+    border-color:black;
+    background-color: white;
+    background: linear-gradient(300deg, #3a86ff, #8338ec, #ff006e);
+    background-size: 400% 400%; 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    transition: 1s;
+    animation: gradientMove 3s linear infinite;
 
 }
 
