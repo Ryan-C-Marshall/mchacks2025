@@ -55,6 +55,4 @@ def ai_function(prompt):
 
     # print("Similarity Results:", result)  # Debug: Log the results
 
-    print(data_manipulation.rank_songs(result))
-    
-    return print(data_manipulation.rank_songs(result))
+    return data_manipulation.rank_songs(result)
