@@ -12,7 +12,7 @@ global current_token
 
 token_reloaded = False
 
-special_token = 'BQA2C8HX1wFdItDwBaWd1o_DNex5t0B4b-cXu3NSJQplKEaifVRiDYrtQRU-s-bxQZV6fy10CxK9W9ahU_n423nm2bBhgUXbtkFPAxuu3T5MgrmSX6V1OF2r9V7-QoJK2GBK3V8dcDMyYi7-ZIOURSAyf_JJPLRa33pY_smrbUrD_j18Vu9JBR3ecUojJyRbeBcUY2SF_eUNc4ASS4U8JmKiRw'
+special_token = 'BQCxsL79JDuotu3u-MMBv1eI4KPZvms9dMqSLvoXdDIrmlJyiLUOEk-Zd8kEt3rwJPg3FHacNA-MCitQyh37gc--2LTkp59ct6HeEbsx9bs6dmLGVYa28FgcfBREZN8Su3DeMtHrxp5jtyUJAGX_u-8TsYkxj1tByQwMaSOA4kR-ha_FLCsGN_J8lP4i6fr8gufUhDhRfKLFTbGp_VB6cb2spQ'
 
 with open('backend/token.txt', 'r') as file:
     current_token = file.read()
@@ -272,7 +272,7 @@ def add_all_songs_to_playlist(songs: list, playlist_id: str):
 
 
 
-# request_user_authentication()
+request_user_authentication()
 
 # create_playlist()
 
