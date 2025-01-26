@@ -1,11 +1,11 @@
 import math
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 
-import metadata
+import backend.big_data as big_data
 
-all_genres = metadata.all_genres  # cutoff at 0.8 or sm
+all_genres = big_data.all_genres  # cutoff at 0.8 or sm
 
-all_artists = metadata.all_artists  # either the arist is in the prompt or not (0.8 threshold)
+all_artists = big_data.all_artists  # either the arist is in the prompt or not (0.8 threshold)
 
 artist_genres = {
   # TODO
@@ -60,7 +60,7 @@ def get_association_words():
   
   association_words += all_genres
   association_words += all_artists
-  association_words += metadata.all_eras
+  association_words += big_data.all_eras
 
   return association_words
 
@@ -116,7 +116,7 @@ def rank_songs(association_word_scores: dict):
   # (4) add a field to sort by correct / incorrect era
 
   eras = []
-  for era in metadata.all_eras:
+  for era in big_data.all_eras:
     if association_word_scores[era] > 0.8: # FIXME
       eras.append(era)
 
