@@ -181,7 +181,7 @@ all_artists = [
  'Chris Stapleton',
  'R. Kelly',
  'Jessica Mauboy',
- 'Roxy Music',
+ 'Roxy',
  'Babyface',
  'Kenny G',
  'Shalamar',
@@ -702,7 +702,6 @@ all_artists = [
  'Maurice Williams & The Zodiacs',
  'Louis Armstrong',
  'Murry Kellum',
- 'LCD Soundsystem',
  'Leona Lewis',
  'Duran Duran',
  'David Bowie',
@@ -735,7 +734,7 @@ all_artists = [
  'Slade',
  'Cosima De Vito',
  'Jessie J',
- 'C & C Music Factory',
+ 'C & C Factory',
  'Dire Straits',
  'Chris Andrews',
  'Noah Cyrus',
@@ -808,7 +807,6 @@ all_artists = [
  'Mickey Gilley',
  "Sinéad O'Connor",
  'Gloria Estefan',
- 'Miami Sound Machine',
  'Kulcha',
  'Karen Knowles',
  'Chris Willis',
@@ -1047,7 +1045,6 @@ all_artists = [
  'End Of Fashion',
  'Renee Geyer',
  'Collective Soul',
- 'Sneaky Sound System',
  'Gabby Barrett',
  'Silk City',
  'Diplo',
@@ -1211,7 +1208,6 @@ all_artists = [
  'Wayne Fontana',
  'Ava Max',
  'Daniel Boone',
- 'Sounds Incorporated',
  'TQ',
  'The Crickets',
  'Bobby Brown',
@@ -2473,7 +2469,6 @@ all_artists = [
  'Jack River',
  'ROSÉ',
  'Peter Blakeley',
- 'Musical Youth',
  'Sister Janet Mead',
  'Promises',
  'DJ BoBo',
@@ -3020,7 +3015,6 @@ all_artists = [
  'PARTYNEXTDOOR',
  'Rebecca Levy',
  'Samantha Sang',
- 'Musical Creations Karaoke',
  'The Allniters',
  'Talent',
  'Deep Forest',
@@ -3769,7 +3763,6 @@ all_artists = [
  'Bodyrockers',
  'Bodeans',
  'The Simon Park Orchestra',
- 'De Wolfe Music',
  'Esther and Abi Ofarim',
  'The Androids',
  'Freeez',
@@ -3800,7 +3793,6 @@ all_artists = [
  'Vandalism']
 
 all_genres = [
- 'acid house',
  'dance',
  'hip hop',
  'pop',
@@ -3826,7 +3818,7 @@ all_genres = [
  'country',
  'edm',
  'techno',
- 'funk', 
+ 'funk',
  'blues',
  'contemporary',
  'trap',
@@ -3853,5 +3845,14 @@ all_genres = [
  'soundtrack',
  'movie'
  ]
+
+all_eras = [
+  "2020s",
+  "2010s",
+  "2000s",
+  "1990s",
+  "1980s",
+  "1970s"
+]
 
 

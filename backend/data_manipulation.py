@@ -1,3 +1,4 @@
+import math
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 
 import metadata
@@ -20,19 +21,19 @@ df = pd.read_csv('backend/top_10000_1960-now.csv')
 
 artist_genres = {}
 for _, row in df.iterrows():
-  artists: list = row["Artist Name(s)"].split(",")
-  genres: list = list(set(row["Artist Genres"].split(",")))
+  artists = row["Artist Name(s)"]
+  artists: list = artists.split(", ") if type(artists) == str else []
 
-  for genre in genres:
-    if genre not in all_genres:
-      genres.remove(genre)
+  genres: list = row["Artist Genres"]
+  genres = set(genres.split(",")) if type(genres) == str else set()
 
-  print("Artists: " + str(artists) + ", genres: " + str(genres))
+  genres = list(set.intersection(genres, set(all_genres)))
 
   for artist in artists:
     artist_genres[artist] = artist_genres.get(artist, []) + genres
 
-
+print(artist_genres)
+'''
 # print(df.head())
 
 # Display basic info about the dataset
@@ -40,21 +41,15 @@ for _, row in df.iterrows():
 
 # Get summary statistics of numeric columns
 # print(df.filter(items=["Key","Loudness", "Valence"]).describe())
+'''
 
 ### PANDAS STUFF - END ###
 
 metrics_to_words = {
-  "Danceability": [["Dance", "Party"], ["Calm", "Relaxed"]], # happy used for valence already
-  "Energy": [["Energy", "Party"], ["Slow", "Calm"]],
-  "Acousticness": [["Acoustic"], ["Electronic"]],
-  "Instrumentalness": [["Instrumental"], ["Singing"]],
+  "Danceability": [["Dance", "Party"], ["Calm", "Relaxed"]],
+  "Energy": [["Energetic", "Party"], ["Slow", "Chill"]],
   "Valence": [["Happy", "Joy"], ["Sad"]]
 }
-
-'''
-energy is bad - energetic?
-
-'''
 
 def get_association_words():
   association_words = []
@@ -65,34 +60,14 @@ def get_association_words():
   
   association_words += all_genres
   association_words += all_artists
+  association_words += metadata.all_eras
 
   return association_words
 
 
-def score_metrics(association_word_scores: dict):
+def score_metrics(descriptor_scores: dict):
   """
-  Example argument: 
-  {
-  'Dance': 0.9,
-  'Happy': 0.9,
-  'Calm': 0.2,
-  'Relaxed': 0.2,
-  'Energy': 0.6,
-  'Party': 0.7,
-  'Hype': 0.4,
-  'Slow': 0.3,
-  'Loud': 0.5, 
-  'Quiet': 0.1,
-  'Musical': 0.8,
-  'Acoustic': 0.7,
-  'Instrumental': 0.7,
-  'Singing': 0.7
-  'Electronic': 0.4,
-  'EDM': 0.8,
-  'Happy': 0.6,
-  'Joy': 0.6,
-  'Sad': 0.1
-  }
+  Descriptor scores has each descriptor, and the max association value that was found for it
   """
   metric_scores = {}
 
@@ -102,11 +77,11 @@ def score_metrics(association_word_scores: dict):
     neg_length = len(value[1])
 
     for assoc_word in value[0]:
-      score += association_word_scores[assoc_word] / pos_length
+      score += descriptor_scores[assoc_word] / pos_length
   
     if neg_length != 0:
       for assoc_word in value[1]:
-        score -= association_word_scores[assoc_word] / neg_length
+        score -= descriptor_scores[assoc_word] / neg_length
 
     metric_scores[key] = score
   
@@ -115,44 +90,69 @@ def score_metrics(association_word_scores: dict):
 
 def rank_songs(association_word_scores: dict):
 
+  genres = []
+
   # (1) extract genre data from genres - use a cutoff of TODO (0.8?)
 
+  for genre in all_genres:
+    if association_word_scores[genre] > 0.8: # FIXME
+      genres.append(genre)
+
   # (2) extract genre data from artists
-  
-  # (2.1) use a cutoff of 0.8 to determine artists
 
-  # (3) split songs into two lists: fit in genre, and don't fit in genre
+  for artist in all_artists:
+    if association_word_scores[artist] > 0.8: # (2.1) use a cutoff of 0.8 to determine artists
+      genres = genres + artist_genres[artist]
 
-  # (4) if date, split each list into correct and incorrect era
+  # (3) add a field to sort by: fit in genre / don't fit in genre
 
-  # (5) sort each (either both, or all four) lists by metrics
+  df["Contains Correct Genre"] = df["Artist Genres"].apply(
+    lambda artist_genres: 
+    any(
+      genre in genres for genre in map(str.strip, artist_genres.split(","))
+    ) if type(artist_genres) == str else False
+  )
+
+  # (4) add a field to sort by correct / incorrect era
+
+  eras = []
+  for era in metadata.all_eras:
+    if association_word_scores[era] > 0.8: # FIXME
+      eras.append(era)
+
+
+  df["Correct Era"] = df["Album Release Date"].apply(
+    lambda release_date: 
+    any(
+      release_date[0:4] in [era[0:4] for era in eras]
+    ) if type(release_date) == str else False
+  )
+
+  # (5) add field to sort by metrics
+
+  def score_song(row):
+    '''
+    We have:
+    - song danceability, energy, valence
+    - score of those three from the prompt
+    '''
+    pass
+
+
+  df["Metrics Score"] = df.apply(score_song, axis=1)
+
 
   # (5.1) also sort by popularity?
 
-  # (6) combine all lists, return
+  # (6) sort, starting with least important metrics
 
-  pass
+  sorted_df = df.sort_values(
+    by=["Contains Correct Genre"], 
+    ascending=[False],
+    key=lambda col: col if col.name == "Contains Correct Genre" else None
+  )
 
-print(get_association_words())
-# print(score_metrics(
-''' {
-  'Dance': 0.9,
-  'Happy': 0.9,
-  'Calm': 0.2,
-  'Relaxed': 0.2,
-  'Energy': 0.6,
-  'Party': 0.7,
-  'Hype': 0.4,
-  'Slow': 0.3,
-  'Loud': 0.5, 
-  'Quiet': 0.1,
-  'Musical': 0.8,
-  'Acoustic': 0.7,
-  'Instrumental': 0.7,
-  'Singing': 0.7,
-  'Electronic': 0.4,
-  'EDM': 0.8,
-  'Happy': 0.6,
-  'Joy': 0.6,
-  'Sad': 0.1
-  }))'''
+  print(sorted_df.head)
+  
+  
+rank_songs()
