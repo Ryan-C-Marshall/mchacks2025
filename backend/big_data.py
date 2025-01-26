@@ -6,16 +6,15 @@ artists = df["Artist Name(s)"].str.split(", ").explode().unique().tolist()
 genres = df["Artist Genres"].str.split(",").explode().str.strip().unique().tolist()
 '''
 mean_stdev_descriptors = {
-  "Dance": (0.403, 0.099),	
-  "Calm": (0.235, 0.064),	
-  "Slow": (0.274, 0.038),	
-  "Party": (0.447, 0.253), 
-  "Joy": (0.284, 0.037),	
-  "Relaxed": (0.264, 0.074),
-  "Energetic": (0.206, 0.053),
-  "Chill": (0.206, 0.039),
-  "Happy": (0.212, 0.061),
-  "Sad": (0.246, 0.116)
+  'Dance':	(0.450,	0.118),
+  'Calm':	(0.271,	0.114),
+  'Party':	(0.383,	0.120),
+  'Joy':	(0.319,	0.089),
+  'Relaxed':	(0.312,	0.086),
+  'Energetic':	(0.301,	0.090),
+  'Chill':	(0.219,	0.072),
+  'Happy':	(0.262,	0.069),
+  'Sad':	(0.219,	0.083)
 }
 
 all_artists = [
