@@ -194,8 +194,7 @@ def get_current_user_profile():
     }
 
 
-def create_playlist():
-    
+def create_playlist(song_ids):
     # URL and parameters
     user_id = 'kirsty.erica'
 
@@ -204,9 +203,8 @@ def create_playlist():
     # Query parameters
     # Options: artist, track, year, upc, tag:hipster, tag:new, isrc, and genre
     
-
     payload = {
-        'name': 'test Playlist',
+        'name': 'Your AI Playlist',
         'description': 'palysit',
         'public': True
     }
@@ -222,18 +220,23 @@ def create_playlist():
 
     # Check the status code
     if 200 <= response.status_code <= 299:
+        data = response.json()
+
         print("Search result:")
-        print(json.dumps(response.json(), indent=" "))  # The response contains the access token
+        print(json.dumps(data, indent=" "))  # The response contains the access token
         
-        print(response["id"], response["external_urls"]["spotify"])
+        playlist_id = data.get("id")
+        playlist_link = data.get("external_urls", {}).get("spotify")
+
+        print(playlist_id, playlist_link, "\n!")
 
         # add all songs
         add_all_songs_to_playlist(
-            ['1XAZlnVtthcDZt2NI1Dtxo', '6a8GbQIlV8HBUW3c6Uk9PH', '70XtWbcVZcpaOddJftMcVi'],
-            response["id"]
+            song_ids,
+            playlist_id
         )
 
-        return response["id"], response["external_urls"]["spotify"]
+        return playlist_link
     else:
         print(f"Error {response.status_code}:")
         print(json.dumps(response.json(), indent=" "))
@@ -274,13 +277,5 @@ def add_all_songs_to_playlist(songs: list, playlist_id: str):
 # create_playlist()
 
 # add all songs
-
-get_track('4bEb3KE4mSKlTFjtWJQBqO')
-get_playlist('0qLU30196j17Si4oJMuJKe')
-
-add_all_songs_to_playlist(
-    ['spotify:track:4bEb3KE4mSKlTFjtWJQBqO'],
-    '0qLU30196j17Si4oJMuJKe'
-)
 
 # post_req_for_token()
