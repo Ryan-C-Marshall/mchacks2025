@@ -21,12 +21,15 @@ def process_prompt():
         print(f"Received prompt: {prompt}")
 
         # Pass the prompt to your AI processing function
-        ai_response = ai_function(prompt)  # Call the function from ai_integration.py
-        print("keywords: " + ai_response)
+        ai_response = ai_function(prompt)
+        # Cut it to 30 songs
+        ai_array = ai_response[:30]
+          
+        print("Playlist: " + ai_array)
 
         # Return the AI response as a JSON response
         response = {
-            "message": ai_response,
+            "message": ai_array,
             "status": "success"
         }
 
