@@ -5,6 +5,18 @@ artists = df["Artist Name(s)"].str.split(", ").explode().unique().tolist()
 # Extract genres
 genres = df["Artist Genres"].str.split(",").explode().str.strip().unique().tolist()
 '''
+mean_stdev_descriptors = {
+  "Dance": (0.403, 0.099),	
+  "Calm": (0.235, 0.064),	
+  "Slow": (0.274, 0.038),	
+  "Party": (0.447, 0.253), 
+  "Joy": (0.284, 0.037),	
+  "Relaxed": (0.264, 0.074),
+  "Energetic": (0.206, 0.053),
+  "Chill": (0.206, 0.039),
+  "Happy": (0.212, 0.061),
+  "Sad": (0.246, 0.116)
+}
 
 all_artists = [
  'The KLF',

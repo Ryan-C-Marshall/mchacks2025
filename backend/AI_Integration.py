@@ -2,6 +2,7 @@ import numpy as np
 from keybert import KeyBERT
 from sentence_transformers import SentenceTransformer
 from backend.data_manipulation import get_association_words
+import backend.data_manipulation as data_manipulation
 
 def ai_function(prompt):
     print(f"Processing the prompt: {prompt}")  # Add this to check if the function is called
@@ -42,8 +43,10 @@ def ai_function(prompt):
     result = {}
     for tag, tag_similarities in similarities:
         #result[tag] = {keyword: similarity for keyword, similarity in tag_similarities}
-        result[tag] = max([similarity for _, similarity in tag_similarities])
+        result[tag] = max([round(float(similarity),2) for _, similarity in tag_similarities])
 
 
     print("Similarity Results:", result)  # Debug: Log the results
+
+    # print(data_manipulation.rank_songs(result))
     return result

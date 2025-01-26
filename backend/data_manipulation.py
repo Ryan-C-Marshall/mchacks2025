@@ -3,6 +3,10 @@ import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 
 import backend.big_data as big_data
 
+GENRE_CUTOFF = 0.7
+ARTIST_CUTOFF = 0.8
+ERA_CUTOFF = 0.85
+
 all_genres = big_data.all_genres  # cutoff at 0.8 or sm
 
 all_artists = big_data.all_artists  # either the arist is in the prompt or not (0.8 threshold)
@@ -32,7 +36,8 @@ for _, row in df.iterrows():
   for artist in artists:
     artist_genres[artist] = artist_genres.get(artist, []) + genres
 
-print(artist_genres)
+print("Done artist genres!")
+
 '''
 # print(df.head())
 
@@ -51,23 +56,41 @@ metrics_to_words = {
   "Valence": [["Happy", "Joy"], ["Sad"]]
 }
 
+def get_descriptors():
+  descriptors = []
+  for val in metrics_to_words.values():
+    descriptors = descriptors + val[0] + val[1]
+  
+  descriptors = list(set(descriptors)) # remove duplicates from metrics_to_words
+  
+
 def get_association_words():
   association_words = []
-  for val in metrics_to_words.values():
-    association_words = association_words + val[0] + val[1]
-  
-  association_words = list(set(association_words)) # remove duplicates from metrics_to_words
-  
+
+  association_words += get_descriptors()
   association_words += all_genres
-  association_words += all_artists
   association_words += big_data.all_eras
+  association_words += all_artists
+
 
   return association_words
 
-
-def score_metrics(descriptor_scores: dict):
+def normalize_descriptor_scores(descriptor_scores: dict):
   """
   Descriptor scores has each descriptor, and the max association value that was found for it
+  """
+  normalized_descriptor_scores = {}
+  for descriptor in get_descriptors:
+    mean, stdev = big_data.mean_stdev_descriptors[descriptor]
+
+    normalize_descriptor_scores[descriptor] = (descriptor_scores[descriptor] - mean) / stdev
+  
+  return normalized_descriptor_scores
+
+
+def score_metrics(normalized_descriptor_scores: dict):
+  """
+  Descriptor scores has each descriptor, and a normalized value for that descriptor, which depends on the prompt
   """
   metric_scores = {}
 
@@ -77,11 +100,11 @@ def score_metrics(descriptor_scores: dict):
     neg_length = len(value[1])
 
     for assoc_word in value[0]:
-      score += descriptor_scores[assoc_word] / pos_length
+      score += normalized_descriptor_scores[assoc_word] / pos_length
   
     if neg_length != 0:
       for assoc_word in value[1]:
-        score -= descriptor_scores[assoc_word] / neg_length
+        score -= normalized_descriptor_scores[assoc_word] / neg_length
 
     metric_scores[key] = score
   
@@ -92,16 +115,16 @@ def rank_songs(association_word_scores: dict):
 
   genres = []
 
-  # (1) extract genre data from genres - use a cutoff of TODO (0.8?)
+  # (1) extract genre data from genres - use a cutoff
 
   for genre in all_genres:
-    if association_word_scores[genre] > 0.8: # FIXME
+    if association_word_scores[genre] > GENRE_CUTOFF:
       genres.append(genre)
 
   # (2) extract genre data from artists
 
   for artist in all_artists:
-    if association_word_scores[artist] > 0.8: # (2.1) use a cutoff of 0.8 to determine artists
+    if association_word_scores[artist] > ARTIST_CUTOFF: # (2.1) use a cutoff to determine artists
       genres = genres + artist_genres[artist]
 
   # (3) add a field to sort by: fit in genre / don't fit in genre
@@ -117,7 +140,7 @@ def rank_songs(association_word_scores: dict):
 
   eras = []
   for era in big_data.all_eras:
-    if association_word_scores[era] > 0.8: # FIXME
+    if association_word_scores[era] > ERA_CUTOFF:
       eras.append(era)
 
 
@@ -130,13 +153,17 @@ def rank_songs(association_word_scores: dict):
 
   # (5) add field to sort by metrics
 
+  metric_scores = score_metrics(normalize_descriptor_scores(association_word_scores))
+
   def score_song(row):
     '''
     We have:
     - song danceability, energy, valence
     - score of those three from the prompt
     '''
-    pass
+    return row["Danceability"] * metric_scores["Danceability"] + \
+    row["Energy"] * metric_scores["Energy"] + \
+    row["Valence"] * metric_scores["Valence"]
 
 
   df["Metrics Score"] = df.apply(score_song, axis=1)
@@ -147,6 +174,15 @@ def rank_songs(association_word_scores: dict):
   # (6) sort, starting with least important metrics
 
   sorted_df = df.sort_values(
+    by=["Metrics Score"],
+    ascending=True
+  )\
+  .sort_values(
+    by=["Correct Era"],
+    ascending=[False],
+    key=lambda col: col if col.name == "Correct Era" else None
+  )\
+  .sort_values(
     by=["Contains Correct Genre"], 
     ascending=[False],
     key=lambda col: col if col.name == "Contains Correct Genre" else None
@@ -154,5 +190,3 @@ def rank_songs(association_word_scores: dict):
 
   print(sorted_df.head)
   
-  
-rank_songs()
