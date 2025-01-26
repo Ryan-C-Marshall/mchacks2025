@@ -236,7 +236,7 @@ def create_playlist(song_ids):
             playlist_id
         )
 
-        return playlist_link
+        return {"status": 200, "link": playlist_link}
     else:
         print(f"Error {response.status_code}:")
         print(json.dumps(response.json(), indent=" "))
