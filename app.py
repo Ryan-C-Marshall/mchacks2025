@@ -15,15 +15,13 @@ def process_prompt():
     try:
         data = request.get_json()
         print("Received request data:", data)  
-        prompt = data.get('prompt')  # Extract the 'prompt' key
+        prompt = data.get('prompt')  
         if prompt is None:
             return jsonify({"error": "No prompt received"}), 400
 
         print(f"Received prompt: {prompt}")
 
-        # Pass the prompt to your AI processing function
         ai_response = ai_function(prompt)
-        # Cut it to 30 songs
         
         ai_response = (ai_function(prompt).head(30)).astype(str)
         filtered_response = ai_response[["Track Name", "Artist Name(s)"]]
