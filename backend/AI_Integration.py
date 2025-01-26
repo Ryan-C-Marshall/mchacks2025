@@ -14,16 +14,20 @@ def ai_function(prompt):
     keywords_array  = [kw[0] for kw in keywords]
     print("Extracted Keywords:", keywords_array)
 
+
     tags = get_association_words()
+
 
 
     # Generate embeddings
     embeddings1 = res_model.encode(keywords_array)
     embeddings2 = res_model.encode(tags)
 
+
     # Convert embeddings to NumPy arrays
     embeddings1 = np.array(embeddings1)
     embeddings2 = np.array(embeddings2)
+
 
     print(embeddings1.shape)
     print(embeddings2.shape)
@@ -44,8 +48,13 @@ def ai_function(prompt):
     for tag, tag_similarities in similarities:
         # result[tag] = {keyword: round(float(similarity),2) for keyword, similarity in tag_similarities}
         result[tag] = max([round(float(similarity),2) for _, similarity in tag_similarities])
+        result[tag] = {keyword: similarity for keyword, similarity in tag_similarities}
+        #result[tag] = max([round(float(similarity),2) for _, similarity in tag_similarities])
 
     print(result)  # Debug: Log the results
 
-    data_manipulation.rank_songs(result)
-    return result
+    # print("Similarity Results:", result)  # Debug: Log the results
+
+    print(data_manipulation.rank_songs(result))
+    
+    return print(data_manipulation.rank_songs(result))
