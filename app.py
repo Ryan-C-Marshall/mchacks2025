@@ -30,7 +30,7 @@ def process_prompt():
         
         
         ai_response = (ai_function(prompt).head(30)).astype(str)
-        values = ai_response
+        values = ai_response 
         filtered_response = ai_response[["Track Name", "Artist Name(s)"]]
         to_return = filtered_response.to_dict(orient="records")
         return jsonify(to_return)
