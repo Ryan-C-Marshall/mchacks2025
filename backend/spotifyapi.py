@@ -1,6 +1,8 @@
 import requests
-import base64
 import json
+
+# access token: BQBLHfCL6sBGOW3VvVQPGEUWnGgm-897jDcSDzSu1CXc4_MGTmyLXUstDogUGxLsSwvJjX8hsjmA7XctpVAkGsc6IzaTC1byXTzrPdEpLlonoRivkQOkRqG-l4P9QuHRMf9WdmA677_jK_dKIETpO1LVfBNWrmFpsx5rrSJ2TRDjWwzxDCnl0ODWww
+# token_type=Bearer
 
 # Define client_id and redirect_uri
 client_id = 'cc28f1f810774c558c6d3894c1986c69'
@@ -9,6 +11,8 @@ client_secret = 'b1b30a613dc242a8be830f66858c2210'
 global current_token
 
 token_reloaded = False
+
+special_token = 'BQA2C8HX1wFdItDwBaWd1o_DNex5t0B4b-cXu3NSJQplKEaifVRiDYrtQRU-s-bxQZV6fy10CxK9W9ahU_n423nm2bBhgUXbtkFPAxuu3T5MgrmSX6V1OF2r9V7-QoJK2GBK3V8dcDMyYi7-ZIOURSAyf_JJPLRa33pY_smrbUrD_j18Vu9JBR3ecUojJyRbeBcUY2SF_eUNc4ASS4U8JmKiRw'
 
 with open('backend/token.txt', 'r') as file:
     current_token = file.read()
@@ -64,12 +68,7 @@ def post_req_for_token():
     else:
         print(f"Error {response.status_code}: {response.text}")
 
-def reload_token(callback:callable=None, args:list=None):
-    if token_reloaded:
-        print("Already reloaded token. There is another error.")
-    else:
-        token_reloaded = True
-
+def reload_token():
     response = post_req_for_token()
     token = response.get('access_token')
     print("Token: " + token)
@@ -78,14 +77,7 @@ def reload_token(callback:callable=None, args:list=None):
         file.write(token)
         file.close()
 
-    current_token = token
     previous_tokens.append(token)
-
-    if callback is not None:
-        if args is not None:
-            callback(*args)
-        else:
-            callback()
 
 
 def get_track_info():
@@ -131,7 +123,164 @@ def search():
         print(response.json)
         print(response.url)
         print("Reloading token, trying again ...")
-        # reload_token(callback=get_reccomendations,args=[])
+        reload_token()
 
-search()
+def get_track(id):
+    url = f'https://api.spotify.com/v1/tracks/{id}'
+    headers = {
+        'Authorization': "Bearer " + current_token
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        print("Result:")
+        print(json.dumps(response.json(), indent=" "))
+        print(response.url)
+    else:
+        print(f"Error {response.status_code}:")
+        print(json.dumps(response.json(), indent=" "))
+        print(response.url)
+
+
+def get_playlist(id):
+    url = f'https://api.spotify.com/v1/playlists/{id}'
+    headers = {
+        'Authorization': "Bearer " + current_token
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        print("Result:")
+        print(json.dumps(response.json(), indent=" "))
+        print(response.url)
+    else:
+        print(f"Error {response.status_code}:")
+        print(json.dumps(response.json(), indent=" "))
+        print(response.url)
+
+def request_user_authentication():
+    # URL and parameters
+    url = f'https://accounts.spotify.com/authorize'
+
+    # Query parameters
+    # Options: artist, track, year, upc, tag:hipster, tag:new, isrc, and genre
+
+    params = {
+        'client_id': client_id,
+        'response_type': 'token',
+        'redirect_uri': 'http://127.0.0.1:5500/frontend/index.html',
+        'scope': 'playlist-modify-public'
+    }
+
+    # Send the GET request
+    response = requests.get(url, params=params)
+
+    # Check the status code
+    if response.status_code == 200:
+        print("Result:")
+        print(response.url)
+    else:
+        print(f"Error {response.status_code}:")
+        print(json.dumps(response.json(), indent=" "))
+        print(response.url)
+
+def get_current_user_profile():
+    url = 'https://api.spotify.com/v1/me'
+
+    header = {
+        'Authorization: Bearer 1POdFZRZbvb...qqillRxMr2z'
+    }
+
+
+def create_playlist():
+    
+    # URL and parameters
+    user_id = 'kirsty.erica'
+
+    url = f'https://api.spotify.com/v1/users/{user_id}/playlists'
+
+    # Query parameters
+    # Options: artist, track, year, upc, tag:hipster, tag:new, isrc, and genre
+    
+
+    payload = {
+        'name': 'test Playlist',
+        'description': 'palysit',
+        'public': True
+    }
+
+    # Headers
+    headers = {
+        'Authorization': 'Bearer ' + special_token,
+        'Content-Type': 'application/json'
+    }
+
+    # Send the POST request
+    response = requests.post(url, headers=headers, json=payload)
+
+    # Check the status code
+    if 200 <= response.status_code <= 299:
+        print("Search result:")
+        print(json.dumps(response.json(), indent=" "))  # The response contains the access token
+        
+        print(response["id"], response["external_urls"]["spotify"])
+
+        # add all songs
+        add_all_songs_to_playlist(
+            ['1XAZlnVtthcDZt2NI1Dtxo', '6a8GbQIlV8HBUW3c6Uk9PH', '70XtWbcVZcpaOddJftMcVi'],
+            response["id"]
+        )
+
+        return response["id"], response["external_urls"]["spotify"]
+    else:
+        print(f"Error {response.status_code}:")
+        print(json.dumps(response.json(), indent=" "))
+        print(response.url)
+
+    # TODO return playlist details
+
+def add_all_songs_to_playlist(songs: list, playlist_id: str):
+    
+    url = f'https://api.spotify.com/v1/playlists/{playlist_id}/tracks'
+
+    # Headers
+    headers = {
+        'Authorization': 'Bearer ' + special_token,
+        'Content-Type': 'application/json'
+    }
+
+    payload = {
+        "uris": songs
+    }
+
+    # Send the POST request
+    response = requests.post(url, headers=headers, json=payload)
+
+    # Check the status code
+    if response.status_code == 200:
+        print("Search result:")
+        print(json.dumps(response.json(), indent=" "))  # The response contains the access token
+    else:
+        print(f"Error {response.status_code}:")
+        print(json.dumps(response.json(), indent=" "))
+        print(response.url)
+
+
+
+# request_user_authentication()
+
+# create_playlist()
+
+# add all songs
+
+get_track('4bEb3KE4mSKlTFjtWJQBqO')
+get_playlist('0qLU30196j17Si4oJMuJKe')
+
+add_all_songs_to_playlist(
+    ['spotify:track:4bEb3KE4mSKlTFjtWJQBqO'],
+    '0qLU30196j17Si4oJMuJKe'
+)
+
 # post_req_for_token()
