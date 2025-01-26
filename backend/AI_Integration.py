@@ -46,13 +46,13 @@ def ai_function(prompt):
     # Organize results into a dictionary
     result = {}
     for tag, tag_similarities in similarities:
+        # result[tag] = {keyword: round(float(similarity),2) for keyword, similarity in tag_similarities}
+        result[tag] = max([round(float(similarity),2) for _, similarity in tag_similarities])
         result[tag] = {keyword: similarity for keyword, similarity in tag_similarities}
         #result[tag] = max([round(float(similarity),2) for _, similarity in tag_similarities])
 
+    print(result)  # Debug: Log the results
 
     # print("Similarity Results:", result)  # Debug: Log the results
 
-    print(data_manipulation.rank_songs(result))
-    
-    print(data_manipulation.rank_songs(result))
-    return result
+    return data_manipulation.rank_songs(result)
