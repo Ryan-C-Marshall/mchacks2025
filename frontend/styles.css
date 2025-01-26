@@ -9,18 +9,34 @@
     flex-direction: column;
 }
 
+.a,.m,.y,.I{
+    color:#ff006e
+}
+
+.A,.o{
+    color:#3a86ff
+}
+
+.r,.n{
+    color:#8338ec
+}
+
 .logo-div{
     flex:1;
     align-items: center;
     text-align: center;
-    font-family: Poppins;
+    font-family: futura, Helvetica;
+    color:#3a86ff;
+    font-size: 20px;
+
 }
 
 .main{
-    justify-content: center; /* Centers horizontally */
-    align-items: center; /* Centers vertically */
-    height: 100vh; /* Make sure it takes up the full height of the viewport */
-    flex-direction: column; /* Stack the elements vertically */
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    flex-direction: column; 
+
 }
 
 .prompt-box{
@@ -39,10 +55,14 @@
 
 .slogan-div{
     text-align: center;
-    font-family: Poppins;
+    font-family: futura, Helvetica;
     font-size: 30px;
     display:flex;
+    margin-left:30px;
+    margin-right:30px;
+
 }
+
 
 .prompt-input{
     padding: 10px;
@@ -52,7 +72,7 @@
     width: 500px;
     height: 50px;
     border-radius: 20px;
-    border-width: 3px;
+    border-width: 2px;
     border-style: solid;
     border-color: black;
 }
@@ -86,10 +106,24 @@
     color: white;
     border: none;
     font-size: 16px;
+    font-family: futura, Helvetica;
     cursor: pointer;
     border-radius: 20px;
     margin-top: 20px;
-    /*box-shadow: 10px 5px 0px 0px #d1b1ff;*/
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+}
+
+.submit-button:hover {
+    background: linear-gradient(300deg, #3a86ff, #8338ec, #ff006e);
+    background-size: 400% 400%; 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    transition: 1s;
+    animation: gradientMove 5s linear infinite;
 }
 
 @keyframes gradientMove {
@@ -106,10 +140,26 @@
 
 .gradient-text {
     background: linear-gradient(300deg, #3a86ff, #8338ec, #ff006e);
-    background-size: 400% 400%; 
+    background-size: 300% 300%; 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     color: transparent;
-    animation: gradientMove 7s linear infinite;
+    animation: gradientMove 5s linear infinite;
 }
+
+.li{
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 25px;
+    border-style: solid;
+    border-color: #8338ec;
+    border-width: 2px;
+    margin-right: 30px;
+    margin-left: 30px;
+    margin-bottom: 10px;
+    list-style-type: none;
+    font-family: futura, Helvetica;
+
+}
+

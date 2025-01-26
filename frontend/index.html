@@ -9,7 +9,7 @@
 <body>
     <div class="header-div">
         <div class="logo-div">
-            <h1>AI Playlist Maker</h1>
+            <h1>H<span class="a">a</span><span class="r">r</span><span class="m">m</span><span class="o">o</span><span class="n">n</span><span class="y">y</span><span class="A">A</span><span class="I">I</span></h1>
         </div>
     </div>
     <div class="main">
@@ -22,28 +22,18 @@
                 <button class="submit-button" type="submit">Generate</button>
             </form>
         </div>  
-        <ul id="song-list" style="
-            list-style-type: none;
-            padding: 0;">
-        </ul>
-
-        <li style="
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            background-color: #f9f9f9;""
-        >
-        </li>
+        
+        <ul class="ul" id="song-list"></ul>
     </div>  
+    
 
 
 
 
     <script>
-        console.log('Hihaaaaa')
+    
     document.getElementById('promptForm').addEventListener("submit", async (event) => {
-        event.preventDefault(); // Prevent page reload
+        event.preventDefault(); 
         const prompt = document.getElementById('prompt-id').value;
         try {
             // Send the prompt to your backend
@@ -54,10 +44,30 @@
                 },
                 body: JSON.stringify({ prompt: prompt }),
             });
-            // Check if response was successful
+            
             if (response.ok) {
-                const result = await response.json();
-                console.log('Result from backend:', result);
+                
+                const data = await response.json();
+                console.log('Fetched songs:', data);
+
+            
+                const songList = document.getElementById('song-list');
+
+                // Clear existing content in the song list
+                songList.innerHTML = '';
+
+                // Populate the song list
+                if (Array.isArray(data)) {
+                    data.forEach((song, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${index + 1}: ${song['Artist Name(s)']} - ${song['Track Name']}`;
+                listItem.classList.add('li');
+                songList.appendChild(listItem);
+            });
+            } else {
+            console.error('Invalid songs data format:', songs);
+        }
+                
             } else {
                 console.error('Error in response:', response.status, response.statusText);
             }
@@ -65,19 +75,24 @@
             console.error('Error sending request:', error);
         }
     });
-
     
-    async function fetchPlaylist() {
-        try {
-            const response = await fetch('http://127.0.0.1:5000/get-playlist', {
-                method: 'GET',
-            });
+    
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+    /*
+    async function fetchPlaylist() {
+        const userInput = document.getElementById('prompt-form').value;
+        console.log(userInput) // Capture user input from the input field
+
+        try {
+            const response2 = await fetch(`http://127.0.0.1:5000/get-playlist?prompt=${encodeURIComponent(userInput)}`, {
+            method: 'GET',
+        });
+
+            if (!response2.ok) {
+                throw new Error(`HTTP error! status: ${response2.status}`);
             }
 
-            const data = await response.json();
+            const data = await response2.json();
             console.log('Fetched songs:', data);
 
             // Ensure 'songs' exists in the response
@@ -91,7 +106,8 @@
             if (Array.isArray(songs)) {
             songs.forEach((song, index) => {
                 const listItem = document.createElement('li');
-                listItem.textContent = `#${index + 1}: ${song['Artist Name(s)']} - ${song['Track Name']}`;
+                listItem.textContent = `${index + 1}: ${song['Artist Name(s)']} - ${song['Track Name']}`;
+                listItem.classList.add('li');
                 songList.appendChild(listItem);
             });
         } else {
@@ -102,8 +118,12 @@
         }
     }
 
-    fetchPlaylist();
-
+    document.getElementById('promptForm').addEventListener("submit", async (event) => { 
+        fetchPlaylist();
+    });
+    
+    */
     
     </script>
 </body>
+
