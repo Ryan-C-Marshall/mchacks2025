@@ -7,53 +7,11 @@
 </head>
 
 <body>
-    <h2 id="title">Welcome To GFG</h2>
-    <p>
-        Default code has been
-        loaded into the Editor.
-    </p>
-
-    <button id="testbutton" onclick="testFun()">
-        press!
-    </button>
-
-    <div class="prompt-box" id="prompt-box-id">
-        <form id="promptForm">
-            <input  type="text" placeholder="What do you want to listen to today?" id="prompt-id">
-            <button type="submit">Generate</button>
-        </form>
-    </div>  
-
-</body>
-<script>
-    console.log('Hihaaaaa')
-    document.getElementById('promptForm').addEventListener("submit", async (event) => {
-        event.preventDefault(); // Prevent page reload
-
-        const prompt = document.getElementById('prompt-id').value;
-
-        try {
-            // Send the prompt to your backend
-            const response = await fetch('http://127.0.0.1:5000/process-prompt', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ prompt: prompt }),
-            });
-
-            // Check if response was successful
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Result from backend:', result);
-            } else {
-                console.error('Error in response:', response.status, response.statusText);
-            }
-        } catch (error) {
-            console.error('Error sending request:', error);
-        }
-    });
-
-</script>
-
-</html>
+    <div class="header-div">
+        <div class="logo-div">
+            <h1>AI Playlist Maker</h1>
+        </div>
+    </div>
+    <div class="main">
+        <div class="slogan-div">
+            <h1 class="slogan">Making a new <span cla

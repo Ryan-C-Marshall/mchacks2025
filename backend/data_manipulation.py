@@ -13,10 +13,8 @@ print(df.filter(items=["Key","Loudness", "Valence"]).describe())
 
 metrics_to_words = {
   "Danceability": [["Dance", "Party"], ["Calm", "Relaxed"]], # happy used for valence already
-  "Energy": [["Energy", "Party"], ["Slow", "Calm"]],
-  "Loudness": [["Loud", "Hype"], ["Quiet"]], # hype again? change
-  "Speechiness": [["Slow"], ["Musical"]],  # putting musical here should naturally discourage lots of speechiness
-  "Acousticness": [["Acoustic"], ["Electronic", "EDM"]],
+  "Energy": [["Energetic", "Party"], ["Slow", "Calm"]],
+  "Acousticness": [["Acoustic"], ["Electronic"]],
   "Instrumentalness": [["Instrumental"], ["Singing"]],
   "Valence": [["Happy", "Joy"], ["Sad"]]
 }
@@ -83,7 +81,7 @@ def score_metrics(association_word_scores: dict):
 def rank_songs(metric_scores: dict):
   pass
 
-
+'''
 print(score_metrics({
   'Dance': 0.9,
   'Happy': 0.9,
@@ -105,3 +103,4 @@ print(score_metrics({
   'Joy': 0.6,
   'Sad': 0.1
   }))
+'''

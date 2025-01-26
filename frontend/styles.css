@@ -3,3 +3,113 @@
     width: 400px;
     text-align: left;
 }
+
+.header{
+    display: flexbox;
+    flex-direction: column;
+}
+
+.logo-div{
+    flex:1;
+    align-items: center;
+    text-align: center;
+    font-family: Poppins;
+}
+
+.main{
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    height: 100vh; /* Make sure it takes up the full height of the viewport */
+    flex-direction: column; /* Stack the elements vertically */
+}
+
+.prompt-box{
+    display: flex;
+    justify-content: center; /* Centers the form inside the prompt-box */
+    align-items: center;
+    width: 100%;
+}
+
+.prompt-form{
+    display: flex;
+    flex-direction: column; /* Stack the input and button vertically */
+    align-items: center; /* Center the form elements horizontally */
+    gap: 10px;  
+}
+
+.slogan-div{
+    text-align: center;
+    font-family: Poppins;
+    font-size: 30px;
+    display:flex;
+}
+
+.prompt-input{
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 16px;
+    width: 500px;
+    height: 50px;
+    border-radius: 20px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: black;
+}
+
+.prompt-input:focus {
+    outline: none; /* Remove the default outline */
+    animation: changeBorderColor 4s infinite; /* Add the animation */
+}
+
+@keyframes changeBorderColor {
+    0% {
+        border-color: #3a86ff; /* Initial border color (blue) */
+    }
+    25% {
+        border-color: #8338ec; /* Midway color (purple) */
+    }
+    50% {
+        border-color: #ff006e; /* Final border color (pink) */
+    }
+    75% {
+        border-color: #8338ec; /* Midway color (purple) */
+    }
+    100% {
+        border-color: #3a86ff; /* Initial border color (blue) */
+    }
+}
+
+.submit-button {
+    padding: 10px 20px;
+    background-color: #8338ec;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 20px;
+    margin-top: 20px;
+    /*box-shadow: 10px 5px 0px 0px #d1b1ff;*/
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.gradient-text {
+    background: linear-gradient(300deg, #3a86ff, #8338ec, #ff006e);
+    background-size: 400% 400%; 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    animation: gradientMove 7s linear infinite;
+}
